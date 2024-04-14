@@ -1,0 +1,27 @@
+---
+interfaces:
+
+  - device: Test Device
+    enabled: yes
+    type: virtual
+    name: vlan.10
+
+  - device: Test Device
+    enabled: yes
+    type: virtual
+    name: vlan.20
+
+  - device: Test Device
+    enabled: yes
+    type: virtual
+    name: vlan.30
+
+  - device: Test Device
+    enabled: yes
+    type: virtual
+    name: vlan.40
+
+  - device: Test Device
+    enabled: yes
+    type: virtual
+    name: vlan.50

@@ -1,0 +1,21 @@
+# Ansible Playbook to add circuit to Netbox
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: "Test NetBox IP address module"
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - netbox.netbox
+
+  tasks:
+    - name: Create region within NetBox with only required information
+      netbox.netbox.netbox_region:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: "Test Region One"
+        state: present
+...

@@ -1,0 +1,20 @@
+---
+- name: Gather facts from hosts to populate Netbox
+  connection: network_cli
+  hosts: device_roles_switch
+  gather_facts: true
+
+  tasks:
+    - name: Add Firmware version to hosts from gather_facts
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: "{{ item }}"
+          custom_fields: 
+            Firmware_version: "{{ ansible_facts['net_version'] }}"
+        state: present
+      loop: 
+        - "{{ ansible_facts['net_hostname'] }}"
+      delegate_to: localhost
+...

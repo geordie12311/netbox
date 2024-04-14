@@ -1,0 +1,15 @@
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: Create VLAN Groups within NetBox
+  netbox.netbox.netbox_vlan_group:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+    data: "{{ vlan_group }}"
+    state: present
+  loop: "{{ vlan_groups }}"
+  loop_control: 
+    loop_var: vlan_group
+    label: "{{ vlan_group['name']}}"
+...

@@ -1,0 +1,19 @@
+# Ansible Playbook to add delete a circuit in netbox
+# Note: you need to export your NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: "Delete Circuit in Netbox"
+  connection: local
+  hosts: localhost
+  gather_facts: False
+
+  tasks:
+  - name: Delete circuit within netbox
+  netbox.netbox.netbox_circuit:
+    netbox_url: "http://192.168.1.20/"
+    netbox_token: b26141e2f8e529817fa9644c4cf013ed56b02be7
+    data:
+      cid: GTT Test Circuit
+    state: absent
+...

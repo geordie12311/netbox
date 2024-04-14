@@ -1,0 +1,15 @@
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: Create RIRs in Netbox
+  netbox.netbox.netbox_rir:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+    data: "{{ rir }}"        
+    state: present
+  loop: "{{ ipam_rirs }}"
+  loop_control: 
+    loop_var: rir
+    label: "{{ rir['name']}}"
+...

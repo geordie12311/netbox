@@ -1,0 +1,40 @@
+# Ansible Playbook to add circuit to Netbox
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: "Add NetBox contact group"
+  connection: local
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create contact role within NetBox
+      netbox.netbox.netbox_contact_role:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: Support
+        state: present
+
+    - name: Create contact group within NetBox
+      netbox.netbox.netbox_contact_group:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: Lab Support Team
+          slug: "lab_support"
+          description: Support team for GH-Lab
+        state: present
+
+    - name: Create contact within the contract group
+      netbox.netbox.netbox_contact:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: G Harwood
+          title: Manager
+          phone: 123456789
+          email: g.harwood@gh-lab.com
+        state: present
+...

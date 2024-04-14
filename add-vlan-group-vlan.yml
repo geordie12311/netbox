@@ -1,0 +1,35 @@
+# Ansible Playbook to add a rack role and a new rack to Netbox
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: Add a new rack to Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create vlan group within Netbox with only required information
+      netbox.netbox.netbox_vlan_group:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: Test vlan group
+          site: Selby
+        state: present
+
+    - name: "Task2: Create a new vlan in the new VLAN Group in Netbox"
+      netbox.netbox.netbox_vlan:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: Test VLAN
+          vid: 666
+          vlan_group: Test VLAN Group
+          tenant: GH-lab
+          status: Active
+          description: Created using Ansible playbook
+        state: present
+...
+
+...

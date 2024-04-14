@@ -1,0 +1,50 @@
+---
+prefixes:
+
+ - parent: 192.168.0.0/18
+   status: Active
+   description: Network Management
+   prefix_length: 26
+   site: Selby
+   tenant: GH-lab
+   vlan: NET_MGMT
+
+ - parent: 192.168.0.0/18
+   status: Active
+   description: Data
+   prefix_length: 24
+   site: Selby
+   tenant: GH-lab
+   vlan: Data
+
+ - parent: 192.168.0.0/18
+   status: Active
+   description: Voice
+   prefix_length: 24
+   site: Selby
+   tenant: GH-lab
+   vlan: Voice
+
+ - parent: 192.168.0.0/18
+   status: Active
+   description: Corporate Wifi
+   prefix_length: 24
+   site: Selby
+   tenant: GH-lab
+   vlan: Corporate_WiFi
+
+ - parent: 192.168.0.0/18
+   status: Active
+   description: Guest Wifi
+   prefix_length: 24
+   site: Selby
+   tenant: GH-lab
+   vlan: Guest_WiFi
+
+ - parent: 192.168.0.0/18
+   status: Active
+   description: P2P circuits
+   prefix_length: 27
+   site: Selby
+   tenant: GH-lab
+   vlan: Point-to-Point

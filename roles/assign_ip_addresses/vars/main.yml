@@ -1,0 +1,31 @@
+---
+ip_addresses:
+
+  - assigned_object:
+      device: Test Device
+      name: vlan.10
+    prefix: 192.168.2.0/26
+    status: Active
+    tenant: HR
+
+  - assigned_object:
+      device: Test Device
+      name: vlan.20
+    prefix: 192.168.2.64/30
+    status: Active
+    tenant: Finance
+
+  - assigned_object:
+      device: Test Device
+      name: vlan.30
+    prefix: 192.168.0.0/25
+    status: Active
+    tenant: WiFi
+
+  - assigned_object:
+      device: Test Device
+      name: vlan.40
+    prefix: 192.168.0.128/25
+    status: Active
+    tenant: Voice
+...

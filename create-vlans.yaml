@@ -1,0 +1,11 @@
+---
+- name: Create VLANs from role
+  connection: local
+  hosts: localhost
+  gather_facts: False
+
+  roles:
+    - role: create_prefix_and_vlan_roles
+    - role: create_vlans
+      tags: vlans
+...

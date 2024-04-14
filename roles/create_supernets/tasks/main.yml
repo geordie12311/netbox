@@ -1,0 +1,15 @@
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: Create SuperNets within NetBox
+  netbox.netbox.netbox_prefix:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+    data: "{{ supernet_prefix }}"
+    state: present
+  loop: "{{ supernet_prefixes }}"
+  loop_control: 
+    loop_var: supernet_prefix
+    label: "{{ supernet_prefix['prefix']}}"
+...

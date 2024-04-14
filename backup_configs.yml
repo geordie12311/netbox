@@ -1,0 +1,19 @@
+---
+- name: Playbook to backup configs on Cisco Switches
+  connection: network_cli
+  hosts: device_roles_switch
+  gather_facts: false
+
+  tasks:
+    - name: Show running config on device
+      cisco.ios.ios_command:
+        commands:
+          - show run
+      register: config
+
+    - name: Save output to backup folder
+      ansible.builtin.copy:
+        content: "{{ config.stdout[0] }}"
+        dest: "./device_backups/{{ inventory_hostname }}.config.txt"
+        mode: "0644"
+...

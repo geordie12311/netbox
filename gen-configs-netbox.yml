@@ -1,0 +1,13 @@
+---
+- name: Create configuration files from Netbox data
+  connection: local
+  hosts: all
+  gather_facts: false
+
+  tasks:
+  - name: "Generate the configs using data contained from netbox"
+    template:
+      src: "./templates/sw_config_template.j2"
+      dest: "./outputs/{{ inventory_hostname }}.cfg"
+      lstrip_blocks: yes
+...

@@ -1,0 +1,23 @@
+
+---
+- name: Add a new rack to Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: "Task2: Create a new vlan in the new VLAN Group in Netbox"
+      netbox_vlan:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: Test VLAN
+          vid: 666
+          site: Selby
+          vlan_group: Test VLAN Group
+          tenant: GH-lab
+          status: Active
+          vlan_role: Test VLAN Role
+          description: Created using Ansible playbook
+        state: present
+...

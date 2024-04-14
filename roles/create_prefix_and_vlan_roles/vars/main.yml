@@ -1,0 +1,11 @@
+---
+ipam_roles:
+
+  - name: Data
+  - name: Voice
+  - name: Corporate_WiFi
+  - name: Guest_WiFi
+  - name: Network_Management
+  - name: Point_to_Point
+  - name: blackhole_vlan
+...

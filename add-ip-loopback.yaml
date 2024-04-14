@@ -1,0 +1,38 @@
+## Ansible Playbook to add a new loopback interface on a device Netbox and 
+## create new IP address associated with the loopback on the device
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: Add a new rack to Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: "Task1: Create a new loopback interface on a device"
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          device: Test Device
+          name: Loopback0
+          type: Virtual
+          description: Created by Netbox
+          mgmt_only: true
+          mode: Access
+        state: present
+
+    - name: Create an IP address and assign to the loopback
+      netbox.netbox.netbox_ip_address:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          address: 10.10.10.99
+          role: Loopback
+          description: Mgmt loopback
+          assigned_object:
+            name: Loopback0
+            device: Test Device
+        state: present
+...

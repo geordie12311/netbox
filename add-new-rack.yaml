@@ -1,0 +1,35 @@
+# Ansible Playbook to add a rack role and a new rack to Netbox
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: Add a new rack to Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  
+  tasks:
+    - name: "Task1: Create a new rack role within NetBox"
+      netbox.netbox.netbox_rack_role:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: Test_rack_role
+          color: FFFFFF
+        state: present
+
+    - name: Create rack within NetBox
+      netbox.netbox.netbox_rack:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: Test rack
+          description: network test rack
+          rack_role: Test_rack_role
+          type: 4-post cabinet
+          u_height: 42
+          facility_id: Rack_1
+          site: Selby
+          tenant: GH-lab
+        state: present
+...

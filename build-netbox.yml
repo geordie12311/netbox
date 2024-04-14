@@ -1,0 +1,57 @@
+---
+- name: Create the RIRs on Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: create_rirs
+      tags: rirs
+
+- name: Create the Aggregates on Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: create_aggregates
+      tags: aggregates
+
+- name: Create the Prefixes and VLAN Roles on Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: create_prefix_and_vlan_roles
+      tags: prefix_and_roles
+
+- name: Create the Supernets on Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: create_supernets
+      tags: supernets
+
+- name: Create the VLAN Groups on Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: create_vlan_groups
+      tags: vlan_groups
+
+- name: Create the VLANS on Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: create_vlans
+      tags: vlans
+
+- name: Add the prefixes to the VLANs
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: create_prefixes
+      tags: Create the VLANS on Netbox
+...

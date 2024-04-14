@@ -1,0 +1,69 @@
+# Ansible Playbook to add circuit to Netbox
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: "Add Circuits to Netbox"
+  connection: local
+  hosts: localhost
+  gather_facts: False
+
+  tasks:
+    - name: "Task1: Create new circuit provider within NetBox"
+      netbox.netbox.netbox_provider:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: GTT
+          description: Current MPLS Service Provider
+
+    - name: "Task2: Create a new RIR within NetBox for MPLS"
+      netbox.netbox.netbox_rir:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: RFC3031
+        state: present
+
+    - name: "Task3: Create an ASN for the new provider"
+      netbox.netbox.netbox_asn:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          asn: 65001
+          rir: RFC3031
+          description: GTT ASN
+        state: present
+
+    - name: "Task4: Update the Provider with additional information"
+      netbox.netbox.netbox_provider:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: GTT
+          comments: "NOC contact details: noc@gtt.net"
+        state: present
+
+    - name: "Task5: Create MPLS circuit type for the new provider"
+      netbox.netbox.netbox_circuit_type:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: MPLS
+
+    - name: "Task6: Add a new MPLS circuit under the new provider"
+      netbox.netbox.netbox_circuit:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          cid: GTT Test Circuit
+          provider: GTT
+          circuit_type: MPLS
+          status: Active
+          tenant: GH-Lab
+          install_date: "2022-12-25"
+          commit_rate: 10000
+          description: Primary Circuit
+          comments: "GTT MPLS circuit"
+        state: present
+...

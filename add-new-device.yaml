@@ -1,0 +1,31 @@
+# Ansible Playbook to add a device to Netbox
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: Create new device in Netbox
+  connection: local
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create device within NetBox
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: Test Device
+          device_type: C9300
+          device_role: switch
+          platform: ios
+          serial: 12345678
+          primary_ip4: 10.10.10.99 #Note: IP address must already be available in Netbox to assign to a device
+          site: Selby
+          tenant: GH-lab
+          rack: Test rack
+          position: 42
+          face: front
+          airflow: front-to-rear
+          comments: Added using Anible Playbook
+        state: present
+...

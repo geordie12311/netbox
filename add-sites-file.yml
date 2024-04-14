@@ -1,0 +1,20 @@
+# Ansible Playbook to add sites to netbox from a file
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: "Add sites to NetBox using a file"
+  connection: local
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create site within NetBox with only required information
+      netbox.netbox.netbox_site:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: "{{ item }}"
+          region: UK
+        state: present
+      loop: "{{ lookup('file', 'sites').splitlines() }}"
+...

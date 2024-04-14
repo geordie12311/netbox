@@ -1,0 +1,11 @@
+---
+- name: Playbook to gather facts from hosts
+  connection: network_cli
+  hosts: device_roles_switch
+  gather_facts: true
+
+  tasks:
+  - name: Print all available facts
+    ansible.builtin.debug:
+      var: ansible_facts
+...

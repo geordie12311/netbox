@@ -1,0 +1,58 @@
+---
+vlans:
+
+  - name: Data
+    status: active
+    tenant: GH-lab
+    vid: 10
+    vlan_group: Test vlan group
+    vlan_role: Data
+    description: Created using Ansible Role
+
+  - name: Voice
+    status: active
+    tenant: GH-lab
+    vid: 20
+    vlan_group: Test vlan group
+    vlan_role: Voice
+    description: Created using Ansible Role
+
+  - name: Corporate_WiFi
+    status: reserved
+    tenant: GH-lab
+    vid: 30
+    vlan_group: Test vlan group
+    vlan_role: Corporate_WiFi
+    description: Created using Ansible Role
+
+  - name: Guest_WiFi
+    status: reserved
+    tenant: GH-lab
+    vid: 40
+    vlan_group: Test vlan group
+    vlan_role: Guest_WiFi
+    description: Created using Ansible Role
+
+  - name: NET_MGMT
+    status: active
+    tenant: GH-lab
+    vid: 50
+    vlan_group: Test vlan group
+    vlan_role: Network_Management
+    description: Created using Ansible Role
+
+  - name: Point-to-Point
+    status: reserved
+    tenant: GH-lab
+    vid: 60
+    vlan_group: Test vlan group
+    vlan_role: Point_to_Point
+    description: Created using Ansible Role
+
+  - name: Blackhole
+    status: active
+    tenant: GH-lab
+    vid: 666
+    vlan_group: Test vlan group
+    vlan_role: blackhole_vlan
+    description: Created using Ansible Role
