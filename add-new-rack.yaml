@@ -23,12 +23,12 @@
         netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
         netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
         data:
-          name: Test rack
+          name: Comms Rack 1
           description: network test rack
-          rack_role: Test_rack_role
+          rack_role: Comms Rack
           type: 4-post cabinet
           u_height: 42
-          facility_id: Rack_1
+          facility_id: Comm_1
           site: Selby
           tenant: GH-lab
         state: present

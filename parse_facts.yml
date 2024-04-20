@@ -1,0 +1,55 @@
+---
+- name: Parse_facts to Netbox
+  connection: network_cli
+  hosts: lab-sw1
+
+  tasks:
+    - name: IOS block
+      block:
+      - name: IOS facts
+        cisco.ios.ios_facts:
+          gather_subset:
+            - hardware
+          gather_network_resources:
+            - "interfaces"
+            - "l2_interfaces"
+            - "l3_interfaces"
+            - "acl_interfaces"
+            - "static_routes"
+            - "acls" 
+        register: _ios_facts
+        become: true
+      - debug:
+          var: _ios_facts
+          verbosity: 2
+      - set_fact:
+          _facts: "{{ _ios_facts }}"
+      when: ansible_network_os == 'ios'
+      tags: [facts, inventory]
+
+    - name: NETBOX block
+      block:
+        - name: Make sure device type is configured
+          netbox.netbox.netbox_device_type:
+            netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+            netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+            data: 
+              model: "{{ _facts.ansible_facts.ansible_net_system | default('unknown') }}"
+              manufacturer: cisco
+              slug: "{{ _facts.ansible_facts.ansible_net_system | default('unknown') }}"
+          throttle: 1
+
+    - name: push device inventory data to netbox
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data: 
+          name: "{{ inventory_hostname }}"
+          site: "{{ lab }}"
+          serial: "{{ _facts.ansible_facts.ansible_net_serialnum | default(omit) }}"
+          device_type: "{{ _facts.ansible_facts.ansible_net_system | default('unknown') }}"
+          device_role: "{{ net_device_role }}"
+          local_context_data: "{{ _facts.ansible_facts.ansible_network_resources }}"
+          comments: "added by Ansible"
+      tags: netbox
+...

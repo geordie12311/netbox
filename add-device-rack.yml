@@ -1,0 +1,22 @@
+# Ansible Playbook to add a existing device to rack in Netbox
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+---
+- name: Add an existing device in Netbox to an existing Rack
+  connection: local
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Update the rack and position of an existing device
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: lab-sw1
+          rack: Comms Rack 1
+          position: 42
+          face: Front
+        state: present
+...

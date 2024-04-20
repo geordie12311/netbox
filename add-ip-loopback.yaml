@@ -4,7 +4,7 @@
 # export NETBOX_URL=http://192.168.1.1/
 # export NETBOX_token=abcde123456723456!!
 ---
-- name: Add a new rack to Netbox
+- name: Add a new loopback and IP to Netbox
   connection: local
   hosts: localhost
   gather_facts: false

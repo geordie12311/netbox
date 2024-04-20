@@ -1,0 +1,85 @@
+# Ansible Playbook to add a new device with primary IP using a varf file in Netbox
+# Note: you need to export NETBOX_URL and NETBOX_TOKEN first Example:
+# export NETBOX_URL=http://192.168.1.1/
+# export NETBOX_token=abcde123456723456!!
+
+- name: Create Devices and Add Primary IP Addresses
+  hosts: localhost
+  gather_facts: no
+
+  vars_files:
+    - "./vars.yaml"
+
+  tasks:
+    - name: Create IP Prefixes
+      netbox.netbox.netbox_prefix:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          prefix: "{{ item.prefix }}"
+          site: "{{ site_name }}"
+          tenant: "{{ tenant_name }}"
+      loop: "{{ ip_prefixes }}"
+      tags: prefix
+
+    - name: Create Devices
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: "{{ item.device }}"
+          site: "{{ site_name }}"
+          tenant: "{{ tenant_name }}"
+          device_type: C9300
+          device_role: test_device
+          platform: ios
+      loop: "{{ devices }}"
+      tags: device
+
+    - name: Create the Management interface for the Devices
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          device: "{{ item.device }}"
+          name: "{{ item.interface }}"
+          type: 1000Base-t (1GE)
+        state: present
+      loop: "{{ devices }}"
+      tags: mgmt
+
+    - name: Update Management IPs
+      netbox.netbox.netbox_ip_address:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          address: "{{ item.primary_ip }}"
+          assigned_object:
+            device: "{{ item.device }}"
+            name: "{{ item.interface }}"
+      loop: "{{ devices }}"
+      tags: mgmt
+
+    - name: Update Management Interfaces
+      netbox.netbox.netbox_device_interface:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          device: "{{ item.device }}"
+          name: "{{ item.interface }}"
+          mgmt_only: true
+      loop: "{{ devices }}"
+      tags: mgmt
+
+    - name: Update Primary IP
+      netbox.netbox.netbox_device:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          name: "{{ item.device }}"
+          site: "{{ site_name }}"
+          tenant: "{{ tenant_name }}"
+          primary_ip4: "{{ item.primary_ip }}"
+      loop: "{{ devices }}"
+      tags: device
+...
