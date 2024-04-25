@@ -1,0 +1,14 @@
+---
+inventory:
+    plugin: NetBoxInventory2
+    options:
+        nb_url: "http://192.168.1.20"
+        nb_token: "b26141e2f8e529817fa9644c4cf013ed56b02be7"
+        ssl_verify: False
+        use_platform_slug: True
+        defaults_file: "defaults.yml"
+
+runner:
+    plugin: threaded
+    options:
+        num_workers: 100
