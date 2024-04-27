@@ -16,6 +16,8 @@
           content_types:
             - dcim.device
           name: Maintenance_Provider
+          group_name: "Maintenance"
+          search_weight: 900
           description: "Name of current Maintenance Provider"
           type: text
     - name: "Task 2: Create a custom fields Maintenance Renewal Date"
@@ -25,6 +27,8 @@
         data:
           name: Maintenance_Renewal_date
           description: "Current Maintenance Renewal Date"
+          group_name: "Maintenance"
+          search_weight: 910
           type: date
     - name: "Task 3: Create a custom field for the Device Firmware Version"
       netbox.netbox.netbox_custom_field:
